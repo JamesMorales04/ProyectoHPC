@@ -143,7 +143,7 @@ método Verificacion( actual , adyacente , peso ):
 
 **T0:** Se encarga de la inicializacion de la variable distancia y sptSet, ademas de esto tambien toma que la distancia hacia la posicion inicial es 0.
 **T1:** Iterador principal encargado de realizar todas las operaciones de busqueda de rutas.
-**T2:** Llamado a funcion encargada de calcular un vetice U que no este en el sptSet y busca el siguiente valor a menor distancia.
+**T2:** Llamado a funcion encargada de calcular un vertice U que no este en el sptSet y busca el siguiente valor a menor distancia.
 **T3:** Se encarga de la actualizacion de la distancia entre los valores adyacentes a U que cumplan con siertas caracteristicas.
 **T4:** Almacena la solucion optenida en un archivo de texto.
 
@@ -153,6 +153,12 @@ método Verificacion( actual , adyacente , peso ):
 
 **Aglomeracion:**
 
-T0:
+**Iniciacion de datos:** T0
+
+**Guardado de datos:** T4
+
+**Procesamiento de datos:** T1,T2,T3
+
+**Cluster de tareas:** [T0 - T1] - [T2] - [T3] - [T4]
 
 **Mapeado:**
