@@ -1,3 +1,4 @@
-﻿  Source.cpp
-C:\Users\james\Desktop\ProyectoHPC\Busqueda de caminos\Busqueda de caminos\Source.cpp(30,27): warning C4018: '<': no coinciden signed/unsigned
+﻿  Paralelo.cpp
+C:\Users\james\Desktop\ProyectoHPC\Busqueda de caminos\Busqueda de caminos\Paralelo.cpp(39,20): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\james\Desktop\ProyectoHPC\Busqueda de caminos\Busqueda de caminos\Paralelo.cpp(42,20): warning C4018: '<': no coinciden signed/unsigned
   Busqueda de caminos.vcxproj -> C:\Users\james\Desktop\ProyectoHPC\Busqueda de caminos\Debug\Busqueda de caminos.exe

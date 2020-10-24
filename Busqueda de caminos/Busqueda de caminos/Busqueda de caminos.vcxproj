@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Secuencial.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Paralelo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
