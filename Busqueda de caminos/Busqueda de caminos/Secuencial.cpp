@@ -45,7 +45,6 @@ std::vector<std::vector<int>> readFile() {
 		columns.push_back(value);
 		k++;
 	}
-
 	Tamano = v.at(0);
 	return rows;
 }
@@ -84,7 +83,7 @@ int distanciaMinima(std::vector<int> distancia, std::vector<bool> sptSet)
 	return min_index;
 }
 
-void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int destino, int procesador)
+void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial)
 {
 	unsigned t0, t1;
 	t0 = clock();
@@ -93,7 +92,6 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 
 
 	for (int i = 0; i < Tamano; i++) {
-
 		distancia[i] = INT_MAX;
 		sptSet[i] = false;
 	}
@@ -106,25 +104,18 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 
 		sptSet[u] = true;
 
-		if (u == destino) {
-			done = true;
-			count = Tamano;
-		}
-		if (!done){		
-			for (int v = 0; v < Tamano; v++) {
-				int value = grafo[u][v];
-				if (!sptSet[v] && value && distancia[u] != INT_MAX && distancia[u] + value < distancia[v]) {
-					distancia[v] = distancia[u] + value;
-
-				}
-
+		for (int v = 0; v < Tamano; v++) {
+			int value = grafo[u][v];
+			if (!sptSet[v] && value && distancia[u] != INT_MAX && distancia[u] + value < distancia[v]) {
+				distancia[v] = distancia[u] + value;
 			}
-		}
 
+		}
+		
 	}
 	t1 = clock();
 	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
-	saveSolution(distancia, "procesador"+procesador,time);
+	saveSolution(distancia, "procesador",time);
 }
 
 int main()
@@ -132,7 +123,7 @@ int main()
 
 	std::vector<std::vector<int>> grafo = readFile();
 
-	dijkstra(grafo, 0,3,0);
+	dijkstra(grafo, 0);
 
 }
 

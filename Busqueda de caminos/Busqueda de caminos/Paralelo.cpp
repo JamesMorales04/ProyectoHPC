@@ -54,7 +54,6 @@ std::vector<std::vector<int>> readFile() {
 	return rows;
 }
 
-#pragma omp declare simd
 void saveSolution(std::vector<int> distancia, std::string name, double time)
 {
 	std::ofstream out(name + ".txt");
@@ -75,7 +74,6 @@ int distanciaMinima(std::vector<int> distancia, std::vector<bool> sptSet)
 {
 	int min = INT_MAX, min_index;
 
-#pragma omp parallel for
 	for (int v = 0; v < Tamano; v++) {
 
 		if (sptSet[v] == false && distancia[v] <= min) {
@@ -97,8 +95,7 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 	std::vector<int> distancia(Tamano);
 	std::vector<bool> sptSet(Tamano);
 
-
-#pragma omp parallel for
+#pragma omp for
 	for (int i = 0; i < Tamano; i++) {
 
 		distancia[i] = INT_MAX;
@@ -107,7 +104,7 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 
 	distancia[posicionInicial] = 0;
 	bool done = false;
-#pragma omp parallel for
+#pragma omp for simd
 	for (int count = 0; count < Tamano - 1; count++) {
 
 		int u = distanciaMinima(distancia, sptSet);
@@ -119,11 +116,11 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 			count = Tamano;
 		}
 		if (!done){		
-#pragma omp parallel for
+
 			for (int v = 0; v < Tamano; v++) {
 				int value = grafo[u][v];
 				if (!sptSet[v] && value && distancia[u] != INT_MAX && distancia[u] + value < distancia[v]) {
-#pragma omp simd
+					
 					distancia[v] = distancia[u] + value;
 
 				}
@@ -136,7 +133,6 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
 	saveSolution(distancia, "procesador"+procesador,time);
 }
-
 int main(int argc, char *argv[])
 {
 	
