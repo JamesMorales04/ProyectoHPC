@@ -220,6 +220,7 @@ método Verificacion( actual , adyacente , peso ):
 
 **Tiempos de ejecución (sólo tomamos en cuenta el tiempo que se demoró en el algoritmo como tal en nuestro caso solo el método Dijkstra):**
 El código secuencial tiene un tiempo de ejecución de entre 0.000300 y 0.00400 segundos, al implementar openMP y MPI logramos reducir este tiempo a un rango mejor de entre 0.000210 y 0.000160 segundos utilizando 2 procesadores y dos hilos, debido a que el algoritmo lo diseñamos para que funcionara con estas características.
+
 **Videos**
 Juan Andres Lopez: https://youtu.be/XS69Pw3Q5O4
 Nicolas Raigosa: https://youtu.be/fWnfq2FPUfg
