@@ -10,9 +10,8 @@
 #include <algorithm>
 #include <mpi.h>
 
-int Tamaño = 0;
+int Tamano = 0;
 
-#pragma omp declare simd
 std::vector<std::vector<int>> readFile() {
 	
 	std::string line;
@@ -38,7 +37,6 @@ std::vector<std::vector<int>> readFile() {
 	for (int i = 1; i < v.size(); i++) {
 		if(k >= v.at(0)){
 			std::vector<int> temp;	
-#pragma omp simd
 			for(int m = 0; m<columns.size();m++){
 				int value = columns.at(m);
 				rows[l][m] = value;
@@ -52,7 +50,7 @@ std::vector<std::vector<int>> readFile() {
 		k++;
 	}
 
-	Tamaño = v.at(0);
+	Tamano = v.at(0);
 	return rows;
 }
 
@@ -62,7 +60,7 @@ void saveSolution(std::vector<int> distancia, std::string name, double time)
 	std::ofstream out(name + ".txt");
 	out << "Vertex \t\t Distance from Source\n";
 
-	for (int i = 0; i < Tamaño; i++) {
+	for (int i = 0; i < Tamano; i++) {
 
 		out << i;
 		out << "\t\t";
@@ -78,7 +76,7 @@ int distanciaMinima(std::vector<int> distancia, std::vector<bool> sptSet)
 	int min = INT_MAX, min_index;
 
 #pragma omp parallel for
-	for (int v = 0; v < Tamaño; v++) {
+	for (int v = 0; v < Tamano; v++) {
 
 		if (sptSet[v] == false && distancia[v] <= min) {
 
@@ -96,12 +94,12 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 {
 	unsigned t0, t1;
 	t0 = clock();
-	std::vector<int> distancia(Tamaño);
-	std::vector<bool> sptSet(Tamaño);
+	std::vector<int> distancia(Tamano);
+	std::vector<bool> sptSet(Tamano);
 
 
 #pragma omp parallel for
-	for (int i = 0; i < Tamaño; i++) {
+	for (int i = 0; i < Tamano; i++) {
 
 		distancia[i] = INT_MAX;
 		sptSet[i] = false;
@@ -110,7 +108,7 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 	distancia[posicionInicial] = 0;
 	bool done = false;
 #pragma omp parallel for
-	for (int count = 0; count < Tamaño - 1; count++) {
+	for (int count = 0; count < Tamano - 1; count++) {
 
 		int u = distanciaMinima(distancia, sptSet);
 
@@ -118,11 +116,11 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 
 		if (u == destino) {
 			done = true;
-			count = Tamaño;
+			count = Tamano;
 		}
 		if (!done){		
 #pragma omp parallel for
-			for (int v = 0; v < Tamaño; v++) {
+			for (int v = 0; v < Tamano; v++) {
 				int value = grafo[u][v];
 				if (!sptSet[v] && value && distancia[u] != INT_MAX && distancia[u] + value < distancia[v]) {
 #pragma omp simd
@@ -136,27 +134,28 @@ void dijkstra(std::vector<std::vector<int>> grafo, int posicionInicial, int dest
 	}
 	t1 = clock();
 	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
-	saveSolution(distancia, "procesador"+procesador);
+	saveSolution(distancia, "procesador"+procesador,time);
 }
 
 int main(int argc, char *argv[])
 {
 	
-	int pid, size;
+	int pid, npr;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &pid);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_size(MPI_COMM_WORLD, &npr);
+
 
 	std::vector<std::vector<int>> grafo = readFile();
-	if (pid <= size/2){
+	if (pid < npr/2){
 		dijkstra(grafo, 0,3,pid);
 	}else{
 		dijkstra(grafo, 3,0,pid);
 	}
-	MPI_Finalize();
 	
-	return 0;
+	MPI_Finalize();
+
 }
 
 
